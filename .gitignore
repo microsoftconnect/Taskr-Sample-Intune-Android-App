@@ -1,0 +1,53 @@
+#built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+bin/
+gen/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Windows thumbnail db
+Thumbs.db
+
+# OSX files
+.DS_Store
+
+# Android Studio and other IDEs
+*.project
+*.classpath
+.gradle
+build/
+.vscode/
+.settings/
+app/.settings/
+
+# IntelliJ files.  If you ask IntelliJ (https://intellij-support.jetbrains.com/hc/en-us/articles/206827587-How-to-manage-projects-under-Version-Control-Systems),
+# you need a whole bunch of files.  However, Android Studio automatically
+# generates the vast majority of these.  Unfortunately, CheckStyle requires
+# configuration files that are not automatically generated, and worse it
+# requires that some configuration go in the .iml files.  We check in just
+# the .iml files that are customized, but exclude them here, so they'll be
+# synced down to the client but any subsequent automatically applied changes
+# will be ignored.
+*.iml
+
+!.idea
+.idea/*
+!.idea/checkstyle-idea.xml
+!.idea/copyright
+!.idea/inspectionProfiles
+.idea/inspectionProfiles/*
+!.idea/inspectionProfiles/profiles_settings.xml
+!.idea/inspectionProfiles/Project_Default.xml
+
+#NDK
+obj/

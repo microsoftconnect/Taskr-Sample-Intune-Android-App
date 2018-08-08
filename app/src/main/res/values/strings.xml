@@ -1,0 +1,66 @@
+<!--
+  ~ Copyright (c) Microsoft Corporation. All rights reserved.
+  ~ Licensed under the MIT License.
+  -->
+
+<resources>
+    <string name="app_name">Taskr</string>
+    <string name="print_name">Taskr Document</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Taskr</string>
+
+    <string name="nav_submit_title">Submit</string>
+    <string name="nav_tasks_title">My tasks</string>
+    <string name="nav_about_title">About</string>
+    <string name="nav_sign_out_title">Sign out</string>
+
+    <string name="onedrive_icon_hint">OneDrive icon</string>
+    <string name="save_icon_hint">Save icon</string>
+    <string name="print_icon_hint">Print icon</string>
+    <string name="check_icon_hint">Check icon</string>
+    <string name="microsoft_hint">Microsoft logo</string>
+
+    <string name="please_sign_in">Welcome to Taskr. Please sign in to proceed!</string>
+    <string name="sign_in_button">Sign in</string>
+
+    <string name="submit_nav_title">Submit a task</string>
+    <string name="submit_nav_description_placeholder">Enter task description</string>
+
+    <string name="submit_nav_no_description">Please enter a description of your task</string>
+    <string name="submit_nav_submitted">Your task has been submitted</string>
+
+    <string name="tasks_nav_title">My tasks</string>
+
+    <string name="submit">Submit</string>
+
+    <string name="csv_header_col_1">ID</string>
+    <string name="csv_header_col_2">Task description</string>
+
+    <string name="err_auth">Authentication error: %s</string>
+    <string name="err_not_allowed">Your IT administrator has disabled this action</string>
+    <string name="err_no_body">There was an error accessing your tasks</string>
+    <string name="err_bad_intent">This app can only accept plain text from other apps</string>
+    <string name="err_not_active">Please try again when the app has fully initialized</string>
+    <string name="err_unset">Your application configuration JSON is not set.</string>
+
+    <string name="auth_success">Successfully signed in</string>
+    <string name="auth_out_success">Successfully signed out</string>
+    <string name="save_success">Saved your tasks to %s</string>
+    <string name="onedrive_allowed">Saving to OneDrive is allowed</string>
+
+    <string name="about_nav_title">About Taskr</string>
+    <string name="about_nav_body_1">Taskr is a line-of-business app that allows employees
+        to keep a personal to-do list. It is a demonstration of Microsoft\'s
+        Android MAM SDK, an
+        <a href="https://www.microsoft.com/en-us/cloud-platform/microsoft-intune">Intune</a> product.
+    </string>
+    <string name="about_nav_body_2">More information about the SDK is available
+        <a href="https://docs.microsoft.com/en-us/intune/app-sdk">here</a> and a developer guide
+        is available <a href="https://docs.microsoft.com/en-us/intune/app-sdk-android">here</a>.
+    </string>
+    <string name="about_nav_config_text">Your Intune application configuration is: %s</string>
+    <string name="about_nav_footer">
+        Developed By t-jaleik at <a href="https://microsoft.com">Microsoft</a>
+    </string>
+</resources>

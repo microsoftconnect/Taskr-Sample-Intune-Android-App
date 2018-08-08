@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) Microsoft Corporation. All rights reserved.
+  ~ Licensed under the MIT License.
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:checkableBehavior="single"
+        android:id="@+id/navbar_items">
+
+        <item
+            android:id="@+id/nav_submit"
+            android:icon="@drawable/ic_submit"
+            android:title="@string/nav_submit_title" />
+        <item
+            android:id="@+id/nav_tasks"
+            android:icon="@drawable/ic_refresh"
+            android:title="@string/nav_tasks_title" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_help"
+            android:title="@string/nav_about_title" />
+        <item
+            android:id="@+id/nav_sign_out"
+            android:icon="@drawable/ic_account"
+            android:title="@string/nav_sign_out_title" />
+    </group>
+
+</menu>
