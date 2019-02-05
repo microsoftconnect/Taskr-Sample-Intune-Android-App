@@ -11,11 +11,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
-import com.microsoft.aad.adal.ADALError;
 import com.microsoft.aad.adal.AuthenticationCallback;
 import com.microsoft.aad.adal.AuthenticationContext;
-import com.microsoft.aad.adal.AuthenticationException;
 import com.microsoft.aad.adal.AuthenticationResult;
 import com.microsoft.aad.adal.PromptBehavior;
 import com.microsoft.intune.mam.client.app.MAMComponents;
@@ -23,15 +22,36 @@ import com.microsoft.intune.mam.policy.MAMEnrollmentManager;
 import com.microsoft.intune.mam.policy.MAMUserInfo;
 
 /**
- * Manages authentication for the app. Methods are safe to call from any class.
+ * Manages authentication for the app.
  *
- * Deals with both ADAL and MAM, significantly.
+ * The following values are Azure AD Constants: AUTHORITY, CLIENT_ID, REDIRECT_URI, and RESOURCE_ID.
+ *  For more information refer to the "Configuring App for ADAL Authentication" section in the README.md.
  */
 public final class AuthManager {
     /**
      * The authority that AuthenticationContexts should use. Sign in will use this URL.
      */
     public static final String AUTHORITY = "https://login.microsoftonline.com/common";
+
+    /**
+     * The AAD client ID registered in the Azure portal.
+     * This ID is unique to this application and should be replaced for yours.
+     */
+    private static final String CLIENT_ID = "<ENTER YOUR CLIENT ID HERE>";
+
+    /**
+     * The AAD redirect URI configured in the Azure portal.
+     * This redirect URI needs to match what is configured when registering the app.
+     */
+    private static final String REDIRECT_URI = "<ENTER YOUR REDIRECT URI HERE>";
+
+    /**
+     * The resource ID for this application.
+     * This sample uses Microsoft Graph and permissions must be granted through the Azure portal
+     * when registering the app.
+     */
+    private static final String RESOURCE_ID = "https://graph.microsoft.com/";
+
     /**
      * Indicates a handler should let ADAL decide to prompt the user for sign in or not.
      */
@@ -40,12 +60,6 @@ public final class AuthManager {
      * Indicates a handler should force ADAL to prompt the user for sign in.
      */
     public static final int MSG_PROMPT_ALWAYS = 2;
-
-    /* The AAD client ID registered at https://apps.dev.microsoft.com.
-     * This ID is unique to this application and should be replaced for yours. */
-    private static final String CLIENT_ID = "bbce9923-37da-4e04-a477-a501ce642ce9";
-    private static final String REDIRECT_URI = "http://localhost";
-    private static final String RESOURCE_ID = "https://graph.microsoft.com/";
 
     private static final String SHARED_PREFERENCES = "com.microsoft.intune.samples.taskr";
     private static final String SP_RESOURCE_ID = "resourceId";
@@ -154,7 +168,6 @@ public final class AuthManager {
         if (prefs.getBoolean(SP_SHOULD_UPDATE_TOKEN, false)
                 && aadId.equals(prefs.getString(SP_AAD_ID, null))) {
             prefs.edit().putBoolean(SP_SHOULD_UPDATE_TOKEN, false).apply();
-
             String resourceId = prefs.getString(SP_RESOURCE_ID, null);
             mgr.updateToken(user, aadId, resourceId,
                     getAccessTokenForMAM(authContext, listener.getContext(), user, aadId, resourceId));
@@ -183,6 +196,8 @@ public final class AuthManager {
                     context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE).edit();
             prefs.putBoolean(SP_SHOULD_UPDATE_TOKEN, token == null);
             if (token == null) {
+                Log.w("MAM Access Token", "Acquired null access token for MAM.");
+
                 prefs.putString(SP_AAD_ID, aadId)
                         .putString(SP_RESOURCE_ID, resourceId)
                         .putString(SP_UPN, upn);
@@ -190,13 +205,16 @@ public final class AuthManager {
 
             prefs.apply();
             return token;
-        } catch (InterruptedException | AuthenticationException e) {
+        } catch (Exception e) {
+            Log.e("MAM Access Token", "Error getting access token for MAM: " + e.getMessage());
+
             context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE).edit()
                     .putBoolean(SP_SHOULD_UPDATE_TOKEN, true)
                     .putString(SP_AAD_ID, aadId)
                     .putString(SP_RESOURCE_ID, resourceId)
                     .putString(SP_UPN, upn)
                     .apply();
+
             return null;
         }
     }

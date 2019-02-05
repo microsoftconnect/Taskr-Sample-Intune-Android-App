@@ -15,14 +15,13 @@
     <string name="nav_about_title">About</string>
     <string name="nav_sign_out_title">Sign out</string>
 
-    <string name="onedrive_icon_hint">OneDrive icon</string>
     <string name="save_icon_hint">Save icon</string>
     <string name="print_icon_hint">Print icon</string>
     <string name="check_icon_hint">Check icon</string>
     <string name="microsoft_hint">Microsoft logo</string>
 
-    <string name="please_sign_in">Welcome to Taskr. Please sign in to proceed!</string>
-    <string name="sign_in_button">Sign in</string>
+    <string name="please_sign_in">Welcome to Taskr!</string>
+    <string name="sign_in_button">Enter</string>
 
     <string name="submit_nav_title">Submit a task</string>
     <string name="submit_nav_description_placeholder">Enter task description</string>
@@ -47,7 +46,6 @@
     <string name="auth_success">Successfully signed in</string>
     <string name="auth_out_success">Successfully signed out</string>
     <string name="save_success">Saved your tasks to %s</string>
-    <string name="onedrive_allowed">Saving to OneDrive is allowed</string>
 
     <string name="about_nav_title">About Taskr</string>
     <string name="about_nav_body_1">Taskr is a line-of-business app that allows employees
@@ -61,6 +59,6 @@
     </string>
     <string name="about_nav_config_text">Your Intune application configuration is: %s</string>
     <string name="about_nav_footer">
-        Developed By t-jaleik at <a href="https://microsoft.com">Microsoft</a>
+        Developed By <a href="https://microsoft.com">Microsoft</a>
     </string>
 </resources>

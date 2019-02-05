@@ -16,5 +16,4 @@
     <dimen name="icon_large_width">40dp</dimen>
     <dimen name="icon_width_plus_margin">40dp</dimen>
     <dimen name="icon_large_width_plus_margin">48dp</dimen>
-    <dimen name="icon_dobule_width_plus_margin">80dp</dimen>
 </resources>

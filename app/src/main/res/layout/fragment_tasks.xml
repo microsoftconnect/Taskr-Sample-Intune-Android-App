@@ -30,34 +30,27 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginEnd="@dimen/activity_horizontal_margin">
 
-        <!-- OneDrive button -->
-        <Button
-            android:id="@+id/tasks_nav_onedrive_icon"
-            android:contentDescription="@string/onedrive_icon_hint"
-            android:layout_width="@dimen/icon_width"
-            android:layout_height="@dimen/icon_height"
-            android:background="@drawable/onedrive"
-            android:layout_alignParentEnd="true" />
-
         <!-- Save button -->
         <Button
             android:id="@+id/tasks_nav_save_icon"
-            android:contentDescription="@string/save_icon_hint"
             android:layout_width="@dimen/icon_width"
             android:layout_height="@dimen/icon_height"
-            android:background="@drawable/ic_save"
+            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="@dimen/icon_width_plus_margin"/>
+            android:layout_marginEnd="0dp"
+            android:background="@drawable/ic_save"
+            android:contentDescription="@string/save_icon_hint" />
 
         <!-- Print button -->
         <Button
             android:id="@+id/tasks_nav_print_icon"
-            android:contentDescription="@string/print_icon_hint"
             android:layout_width="@dimen/icon_width"
             android:layout_height="@dimen/icon_height"
-            android:background="@drawable/ic_print"
+            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="@dimen/icon_dobule_width_plus_margin"/>
+            android:layout_marginEnd="@dimen/icon_width_plus_margin"
+            android:background="@drawable/ic_print"
+            android:contentDescription="@string/print_icon_hint" />
 
     </RelativeLayout>
 

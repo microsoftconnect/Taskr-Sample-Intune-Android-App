@@ -1,0 +1,10 @@
+Version 1.1
+-------------
+* Enables ADAL logging for authentication troubleshooting.
+* Fixes resource files to prevent crashing on API 23 and below.
+* Removes OneDrive functionality that was not fully implemented.
+* Updates ReadMe.md file and adds comments for a better development experience.
+
+Version 1.0
+-------------
+* Initial release of Taskr.

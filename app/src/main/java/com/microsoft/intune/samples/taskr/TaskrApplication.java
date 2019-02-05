@@ -9,6 +9,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.microsoft.aad.adal.AuthenticationContext;
+import com.microsoft.aad.adal.Logger;
 import com.microsoft.intune.mam.client.app.MAMComponents;
 import com.microsoft.intune.mam.client.notification.MAMNotificationReceiverRegistry;
 import com.microsoft.intune.mam.policy.MAMEnrollmentManager;
@@ -64,6 +65,11 @@ public class TaskrApplication extends Application {
             }
             return true;
         }, MAMNotificationType.MAM_ENROLLMENT_RESULT);
+
+        /* ADAL logging is enabled in the app by default for troubleshooting purposes.
+         * More information is available here:
+         * https://github.com/AzureAD/azure-activedirectory-library-for-android/#logs */
+        Logger.getInstance().setAndroidLogEnabled(true);
     }
 
     @Override

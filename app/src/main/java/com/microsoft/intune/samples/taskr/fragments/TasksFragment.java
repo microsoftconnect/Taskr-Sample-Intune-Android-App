@@ -45,7 +45,6 @@ public class TasksFragment extends Fragment {
         RoomManager.getAllTasks().observe(this, adapter::setList);
 
         // Set up the click handlers
-        rootView.findViewById(R.id.tasks_nav_onedrive_icon).setOnClickListener(oneDriveListener);
         rootView.findViewById(R.id.tasks_nav_save_icon).setOnClickListener(saveListener);
         rootView.findViewById(R.id.tasks_nav_print_icon).setOnClickListener(printListener);
 
@@ -82,18 +81,6 @@ public class TasksFragment extends Fragment {
             } else {
                 toastErrorStr(R.string.err_not_active);
             }
-        } else {
-            toastErrorStr(R.string.err_not_allowed);
-        }
-    };
-
-    /* Example of MAM policy - allow saving to OneDrive for Business.
-     * Manually checks whether or not this is allowed. Only shows a toast that indicates saving to
-     * OneDrive is allowed. An Actual LOB app may want to implement this feature. */
-    private final View.OnClickListener oneDriveListener = (final View view) -> {
-        if (MAMPolicyManager.getPolicy(getActivity())
-                .getIsSaveToLocationAllowed(SaveLocation.ONEDRIVE_FOR_BUSINESS, AuthManager.getUser())) {
-            toastErrorStr(R.string.onedrive_allowed);
         } else {
             toastErrorStr(R.string.err_not_allowed);
         }
