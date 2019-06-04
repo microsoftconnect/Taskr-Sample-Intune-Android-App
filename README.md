@@ -1,5 +1,5 @@
 # Taskr - A [Microsoft Intune](https://www.microsoft.com/en-us/cloud-platform/microsoft-intune) Android MAM SDK Example
-This project is a demonstration of the [Microsoft Intune SDK for Android](https://docs.microsoft.com/en-us/intune/app-sdk). A developer guide to the SDK is available [here](https://docs.microsoft.com/en-us/intune/app-sdk-android). This project implements some commonly used features so developers making their own apps have an example to follow. IT administrators who want to create apps with similar functionality can even use this as a template.
+This project is a demonstration of the [Microsoft Intune SDK for Android](https://docs.microsoft.com/en-us/intune/app-sdk). A developer guide to the SDK is available [here](https://docs.microsoft.com/en-us/intune/app-sdk-android). This project implements some commonly used features so developers making their own apps have an example to follow. IT administrators who want to create apps with similar functionality can even use this as a template. The current integrated SDK is version 5.7.1.
 
 Taskr allows users to keep a list of to-do items, or tasks. Users can view their open tasks and mark tasks as complete, print them, or save them to their phone. Tasks are kept in a database implemented using the [Android Room persistence library](https://developer.android.com/topic/libraries/architecture/room). Users' actions are managed by policy, so not all actions may be available.
 
@@ -52,6 +52,3 @@ The following policies are automatically managed by the SDK without explicit app
 - `fragments/TasksFragment.java` explicitly checks MAM policies to see if saving files to a user's device is allowed.
 - `fragments/AboutFragment.java` attempts to retrieve and print the user's Application Configuration JSON object.
 - `app/MAMSDK/` contains the MAM SDK binaries.
-
-## Troubleshooting
-- Do not use "Instant Run" in Android Studio when developing with the MAM SDK build plugin. It will result in build issues.

@@ -1,3 +1,8 @@
+Version 1.2
+-------------
+* Updates the MAM SDK to version 5.7.1, which is compatible with Instant Run.
+* Updates the ReadMe.md file.
+
 Version 1.1
 -------------
 * Enables ADAL logging for authentication troubleshooting.
