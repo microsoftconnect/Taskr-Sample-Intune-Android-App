@@ -5,7 +5,7 @@
 
 package com.microsoft.intune.samples.taskr.utils;
 
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 
 /**
  * This FileProvider allows the app to export files to other apps.

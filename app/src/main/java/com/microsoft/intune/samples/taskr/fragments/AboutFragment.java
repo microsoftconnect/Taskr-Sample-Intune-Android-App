@@ -5,14 +5,14 @@
 
 package com.microsoft.intune.samples.taskr.fragments;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.microsoft.intune.mam.client.app.MAMComponents;
 import com.microsoft.intune.mam.policy.appconfig.MAMAppConfig;

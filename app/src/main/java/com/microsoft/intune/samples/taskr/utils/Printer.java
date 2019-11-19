@@ -6,13 +6,13 @@
 package com.microsoft.intune.samples.taskr.utils;
 
 import android.app.Activity;
-import android.arch.lifecycle.LifecycleOwner;
 import android.content.Context;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintManager;
-import android.support.annotation.NonNull;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 
 import com.microsoft.intune.samples.taskr.R;
 import com.microsoft.intune.samples.taskr.room.RoomManager;

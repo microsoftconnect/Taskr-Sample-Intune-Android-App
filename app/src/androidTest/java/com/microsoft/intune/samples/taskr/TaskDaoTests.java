@@ -5,10 +5,10 @@
 
 package com.microsoft.intune.samples.taskr;
 
-import android.arch.persistence.room.Room;
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.room.Room;
+import androidx.test.InstrumentationRegistry;
+import androidx.test.runner.AndroidJUnit4;
 
 import com.microsoft.intune.samples.taskr.room.Task;
 import com.microsoft.intune.samples.taskr.room.TaskDao;

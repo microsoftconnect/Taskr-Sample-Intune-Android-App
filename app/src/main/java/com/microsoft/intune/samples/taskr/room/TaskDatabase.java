@@ -5,8 +5,8 @@
 
 package com.microsoft.intune.samples.taskr.room;
 
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.RoomDatabase;
+import androidx.room.Database;
+import androidx.room.RoomDatabase;
 
 /**
  * Contains the DAOs that provide access to the app's database.

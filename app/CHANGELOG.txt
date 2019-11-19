@@ -1,3 +1,11 @@
+Version 1.3
+-------------
+* Updates the MAM SDK to version 6.0.0.
+* Converts legacy support libraries to the AndroidX support libraries.
+* Forces Taskr to target the Company Portal for policy.
+* Adds Microsoft SECURITY.md file.
+* Updates the ReadMe.md file.
+
 Version 1.2
 -------------
 * Updates the MAM SDK to version 5.7.1, which is compatible with Instant Run.
