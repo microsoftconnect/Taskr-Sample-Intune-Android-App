@@ -11,6 +11,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 
 import com.microsoft.aad.adal.AuthenticationCallback;
@@ -28,6 +30,9 @@ import com.microsoft.intune.mam.policy.MAMUserInfo;
  *  For more information refer to the "Configuring App for ADAL Authentication" section in the README.md.
  */
 public final class AuthManager {
+    private static final String PLACEHOLDER_CLIENT_ID = "<placeholder_aad_client_id>";
+    private static final String PLACEHOLDER_REDIRECT_URI = "<placeholder_redirect_uri>";
+
     /**
      * The authority that AuthenticationContexts should use. Sign in will use this URL.
      */
@@ -37,13 +42,13 @@ public final class AuthManager {
      * The AAD client ID registered in the Azure portal.
      * This ID is unique to this application and should be replaced for yours.
      */
-    private static final String CLIENT_ID = "<ENTER YOUR CLIENT ID HERE>";
+    private static final String CLIENT_ID = PLACEHOLDER_CLIENT_ID;
 
     /**
      * The AAD redirect URI configured in the Azure portal.
      * This redirect URI needs to match what is configured when registering the app.
      */
-    private static final String REDIRECT_URI = "<ENTER YOUR REDIRECT URI HERE>";
+    private static final String REDIRECT_URI = PLACEHOLDER_REDIRECT_URI;
 
     /**
      * The resource ID for this application.
@@ -87,6 +92,11 @@ public final class AuthManager {
     public static void signInSilent(final AuthenticationContext authContext,
                                     final AuthListener listener,
                                     final Handler handler) {
+
+        if (!hasValidAuthValues(listener.getContext())) {
+            return;
+        }
+
         authContext.acquireTokenSilentAsync(RESOURCE_ID, CLIENT_ID, REDIRECT_URI,
                 new AuthenticationCallback<AuthenticationResult>() {
                     @Override
@@ -113,6 +123,11 @@ public final class AuthManager {
     public static void signInWithPrompt(final AuthenticationContext authContext, final Activity activity,
                                         final AuthListener listener,
                                         final PromptBehavior behavior, final Handler handler) {
+
+        if (!hasValidAuthValues(listener.getContext())) {
+            return;
+        }
+
         /* Setting instance_aware to true means that the callback wil receive an AuthenticationResult with
          * the authority set, allowing the app to register it with MAM and be sovereign cloud aware:
          * https://docs.microsoft.com/en-us/intune/app-sdk-android#sovereign-cloud-registration */
@@ -189,6 +204,10 @@ public final class AuthManager {
     public static String getAccessTokenForMAM(final AuthenticationContext authContext,
                                               final Context context, final String upn,
                                               final String aadId, final String resourceId) {
+        if (!hasValidAuthValues(context)) {
+            return null;
+        }
+
         try {
             String token =
                     authContext.acquireTokenSilentSync(resourceId, CLIENT_ID, aadId).getAccessToken();
@@ -248,5 +267,19 @@ public final class AuthManager {
      */
     public static boolean shouldRestoreSignIn(final Bundle inState) {
         return inState.getBoolean(SAVE_IS_AUTHED);
+    }
+
+    /**
+     * Validation method to ensure the user has changed the necessary auth values.
+     *
+     * @return True if the auth values have been changed, false if otherwise.
+     */
+    private static boolean hasValidAuthValues(final Context context) {
+        if (CLIENT_ID.equals(PLACEHOLDER_CLIENT_ID) || REDIRECT_URI.equals(PLACEHOLDER_REDIRECT_URI)) {
+            Toast.makeText(context, "Please update the authentication values for your application.", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        return true;
     }
 }
