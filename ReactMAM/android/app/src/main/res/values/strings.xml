@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Taskr</string>
+    <string name="microsoft_hint">Microsoft logo</string>
+    <string name="please_sign_in">Welcome to Taskr!</string>
+    <string name="sign_in_button">Enter</string>
+
+    <string name="auth_success">Successfully signed in</string>
+    <string name="auth_out_success">Successfully signed out</string>
+    <string name="err_auth">Authentication error: %s</string>
+
+    <string name="err_unset">Your application configuration JSON is not set.</string>
+
+    <string name="err_not_allowed">Your IT administrator has disabled this action</string>
+    <string name="err_no_folder">The Documents folder can not be created</string>
+
+    <string name="err_no_print">Unable to Access Printing Service</string>
+</resources>

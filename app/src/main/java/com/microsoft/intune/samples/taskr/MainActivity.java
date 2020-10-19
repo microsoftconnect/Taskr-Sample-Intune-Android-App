@@ -5,11 +5,6 @@
 
 package com.microsoft.intune.samples.taskr;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,62 +20,60 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
 
-import com.microsoft.aad.adal.AuthenticationContext;
-import com.microsoft.aad.adal.PromptBehavior;
-import com.microsoft.intune.samples.taskr.authentication.AuthListener;
+import com.microsoft.identity.client.AuthenticationCallback;
+import com.microsoft.identity.client.IAccount;
+import com.microsoft.identity.client.IAuthenticationResult;
+import com.microsoft.identity.client.exception.MsalException;
+import com.microsoft.identity.client.exception.MsalIntuneAppProtectionPolicyRequiredException;
+import com.microsoft.identity.client.exception.MsalUserCancelException;
+import com.microsoft.intune.mam.client.app.MAMComponents;
+import com.microsoft.intune.mam.policy.MAMEnrollmentManager;
+import com.microsoft.intune.samples.taskr.authentication.AppAccount;
+import com.microsoft.intune.samples.taskr.authentication.AppSettings;
+import com.microsoft.intune.samples.taskr.authentication.MSALUtil;
 import com.microsoft.intune.samples.taskr.fragments.AboutFragment;
 import com.microsoft.intune.samples.taskr.fragments.TasksFragment;
 import com.microsoft.intune.samples.taskr.fragments.SubmitFragment;
-import com.microsoft.intune.samples.taskr.authentication.AuthManager;
-import com.microsoft.intune.samples.taskr.room.RoomManager;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The main activity of the app - runs when the app starts.
  *
- * Handles authentication, explicitly interacting with ADAL and implicitly with MAM.
+ * Handles authentication, explicitly interacting with MSAL and implicitly with MAM.
  */
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AuthListener {
-    private Handler mHandler;
-    private AuthenticationContext mAuthContext;
+        implements NavigationView.OnNavigationItemSelectedListener {
+    private static final Logger LOGGER = Logger.getLogger(MainActivity.class.getName());
+
+    private AppAccount mUserAccount;
+    private MAMEnrollmentManager mEnrollmentManager;
+
+    public static final String[] MSAL_SCOPES = {"https://graph.microsoft.com/User.Read"};
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /* If the app has already started, the user has signed in, and the activity was just restarted,
-         * skip the rest of this initialization and open the main UI */
-        if (savedInstanceState != null && AuthManager.shouldRestoreSignIn(savedInstanceState)) {
-            onSignedIn();
-            return;
-        }
+        mEnrollmentManager = MAMComponents.get(MAMEnrollmentManager.class);
 
-        // Start by making a sign in window to show instead of the main view
-        openSignInView();
+        // Get the account info from the app settings.
+        // If a user is not signed in, the account will be null.
+        mUserAccount = AppSettings.getAccount(getApplicationContext());
 
-        mAuthContext = new AuthenticationContext(this, AuthManager.AUTHORITY, true);
-        // Will make sign in attempts that are allowed to access/modify the UI (prompt)
-        mHandler = new Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(final Message msg) {
-                if (msg.what == AuthManager.MSG_PROMPT_AUTO) {
-                    AuthManager.signInWithPrompt(mAuthContext, MainActivity.this,
-                            MainActivity.this, PromptBehavior.Auto, mHandler);
-                } else if (msg.what == AuthManager.MSG_PROMPT_ALWAYS) {
-                    AuthManager.signInWithPrompt(mAuthContext, MainActivity.this,
-                            MainActivity.this, PromptBehavior.Always, mHandler);
-                }
-            }
-        };
-
-        /* We only need to change/set the view and sign in if this is the first time the app
-         * has opened, which is when savedInstanceState is null */
-        if (savedInstanceState == null) {
-            AuthManager.signInSilent(mAuthContext, this, mHandler);
+        if (mUserAccount == null) {
+            displaySignInView();
+        } else {
+            displayMainView();
         }
     }
 
-    private void openMainView() {
+    private void displaySignInView() {
+        setContentView(R.layout.sign_in);
+    }
+
+    private void displayMainView() {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -99,13 +92,44 @@ public class MainActivity extends AppCompatActivity
         Toast.makeText(this, R.string.auth_success, Toast.LENGTH_SHORT).show();
     }
 
-    private void openSignInView() {
-        setContentView(R.layout.sign_in);
-        findViewById(R.id.sign_in_button).setOnClickListener(signInListener);
+    public void onClickSignIn(final View view) {
+        // initiate the MSAL authentication on a background thread
+        Thread thread = new Thread(() -> {
+            LOGGER.info("Starting interactive auth");
+
+            try {
+                String loginHint = null;
+                if (mUserAccount != null) {
+                    loginHint = mUserAccount.getUPN();
+                }
+                MSALUtil.acquireToken(MainActivity.this, MSAL_SCOPES, loginHint, new AuthCallback());
+            } catch (MsalException | InterruptedException e) {
+                LOGGER.log(Level.SEVERE, getString(R.string.err_auth), e);
+                showMessage("Authentication exception occurred - check logcat for more details.");
+            }
+        });
+        thread.start();
     }
 
-    private final View.OnClickListener signInListener = (View view) ->
-            mHandler.sendEmptyMessage(AuthManager.MSG_PROMPT_ALWAYS);
+    private void signOutUser() {
+        // Initiate an MSAL sign out on a background thread.
+        final AppAccount effectiveAccount = mUserAccount;
+
+        Thread thread = new Thread(() -> {
+            try {
+                MSALUtil.signOutAccount(this, effectiveAccount.getAADID());
+            } catch (MsalException | InterruptedException e) {
+                LOGGER.log(Level.SEVERE, "Failed to sign out user " + effectiveAccount.getAADID(), e);
+            }
+
+            mEnrollmentManager.unregisterAccountForMAM(effectiveAccount.getUPN());
+            AppSettings.clearAccount(getApplicationContext());
+            mUserAccount = null;
+
+            runOnUiThread(this::displaySignInView);
+        });
+        thread.start();
+    }
 
     @Override
     public void onBackPressed() {
@@ -120,48 +144,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
         return changeNavigationView(item.getItemId());
-    }
-
-    @Override
-    public void onSignedIn() {
-        // Must be run on the UI thread because it is modifying the UI
-        runOnUiThread(this::openMainView);
-    }
-
-    /**
-     * Called when the user signs out, puts up a blocker window and deletes the database. In a real
-     * LOB app the tasks would have been forwarded to a server and wouldn't be stored locally
-     * anyway, so they are cleared from the cache here to prevent data leaks from user to user.
-     */
-    @Override
-    public void onSignedOut() {
-        Toast.makeText(this, getString(R.string.auth_out_success), Toast.LENGTH_SHORT).show();
-        runOnUiThread(this::openSignInView);
-        RoomManager.deleteAll();
-    }
-
-    @Override
-    public void onError(final Exception e) {
-        Toast.makeText(this, getString(R.string.err_auth, e.getLocalizedMessage()),
-                Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public Context getContext() {
-        return this;
-    }
-
-    @Override
-    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // Required by ADAL
-        mAuthContext.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    protected void onSaveInstanceState(final Bundle outState) {
-        super.onSaveInstanceState(outState);
-        AuthManager.onSaveInstanceState(outState);
     }
 
     /**
@@ -181,7 +163,7 @@ public class MainActivity extends AppCompatActivity
                 frag = new AboutFragment();
                 break;
             case R.id.nav_sign_out:
-                AuthManager.signOut(this);
+                signOutUser();
                 break;
             default: // If we don't recognize the id, go to the default (submit) rather than crashing
             case R.id.nav_submit:
@@ -206,5 +188,70 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         }
         return didChangeView;
+    }
+
+    private void showMessage(final String message) {
+        runOnUiThread(() -> {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private class AuthCallback implements AuthenticationCallback {
+        @Override
+        public void onError(final MsalException exc) {
+            LOGGER.log(Level.SEVERE, "authentication failed", exc);
+
+            if (exc instanceof MsalIntuneAppProtectionPolicyRequiredException) {
+                MsalIntuneAppProtectionPolicyRequiredException appException = (MsalIntuneAppProtectionPolicyRequiredException) exc;
+
+                // Note: An app that has enabled APP CA with Policy Assurance would need to pass these values to `remediateCompliance`.
+                // For more information, see https://docs.microsoft.com/en-us/mem/intune/developer/app-sdk-android#app-ca-with-policy-assurance
+                final String upn = appException.getAccountUpn();
+                final String aadid = appException.getAccountUserId();
+                final String tenantId = appException.getTenantId();
+                final String authorityURL = appException.getAuthorityUrl();
+
+                // The user cannot be considered "signed in" at this point, so don't save it to the settings.
+                mUserAccount = new AppAccount(upn, aadid, tenantId, authorityURL);
+
+                final String message = "Intune App Protection Policy required.";
+                showMessage(message);
+
+                LOGGER.info("MsalIntuneAppProtectionPolicyRequiredException received.");
+                LOGGER.info(String.format("Data from broker: UPN: %s; AAD ID: %s; Tenant ID: %s; Authority: %s",
+                        upn, aadid, tenantId, authorityURL));
+            } else if (exc instanceof MsalUserCancelException) {
+                showMessage("User cancelled sign-in request");
+            } else {
+                showMessage("Exception occurred - check logcat");
+            }
+        }
+
+        @Override
+        public void onSuccess(final IAuthenticationResult result) {
+            IAccount account = result.getAccount();
+
+            final String upn = account.getUsername();
+            final String aadId = account.getId();
+            final String tenantId = account.getTenantId();
+            final String authorityURL = account.getAuthority();
+
+            String message = "Authentication succeeded for user " + upn;
+            LOGGER.info(message);
+
+            // Save the user account in the settings, since the user is now "signed in".
+            mUserAccount = new AppAccount(upn, aadId, tenantId, authorityURL);
+            AppSettings.saveAccount(getApplicationContext(), mUserAccount);
+
+            // Register the account for MAM.
+            mEnrollmentManager.registerAccountForMAM(upn, aadId, tenantId, authorityURL);
+
+            displayMainView();
+        }
+
+        @Override
+        public void onCancel() {
+            showMessage("User cancelled auth attempt");
+        }
     }
 }

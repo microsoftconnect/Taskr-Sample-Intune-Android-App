@@ -19,7 +19,7 @@ import androidx.fragment.app.Fragment;
 import com.microsoft.intune.mam.client.identity.MAMPolicyManager;
 import com.microsoft.intune.mam.policy.SaveLocation;
 import com.microsoft.intune.samples.taskr.R;
-import com.microsoft.intune.samples.taskr.authentication.AuthManager;
+import com.microsoft.intune.samples.taskr.authentication.AppSettings;
 import com.microsoft.intune.samples.taskr.room.TaskListAdapter;
 import com.microsoft.intune.samples.taskr.room.RoomManager;
 import com.microsoft.intune.samples.taskr.utils.Printer;
@@ -42,7 +42,7 @@ public class TasksFragment extends Fragment {
         displayList.setAdapter(adapter);
 
         // Define the observer that will notify the adapter of changes
-        RoomManager.getAllTasks().observe(this, adapter::setList);
+        RoomManager.getAllTasks().observe(getViewLifecycleOwner(), adapter::setList);
 
         // Set up the click handlers
         rootView.findViewById(R.id.tasks_nav_save_icon).setOnClickListener(saveListener);
@@ -68,11 +68,13 @@ public class TasksFragment extends Fragment {
     };
 
     /* Example of MAM policy - allow saving to device.
-     * Manually checks whether or not this is allowed. NOTE: if the user's policy asks the app to
-     * encrypt files, the output of this process will be useless*/
+     * Manually checks whether or not this is allowed.
+     * NOTE: if the user's policy asks the app to encrypt files, the output of this process will be useless*/
     private final View.OnClickListener saveListener = (final View view) -> {
+        String currentUser = AppSettings.getAccount(view.getContext()).getAADID();
+
         if (MAMPolicyManager.getPolicy(getActivity())
-                .getIsSaveToLocationAllowed(SaveLocation.LOCAL, AuthManager.getUser())) {
+                .getIsSaveToLocationAllowed(SaveLocation.LOCAL, currentUser)) {
             Activity activity = getActivity();
             Context context = getContext();
             if (activity != null && context != null) {

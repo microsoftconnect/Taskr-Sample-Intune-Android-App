@@ -106,7 +106,7 @@ public class SaveObserver implements Observer<String> {
      */
     private void confirmWritePermission() {
         if (PermissionChecker.checkSelfPermission(mContext,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PermissionChecker.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(mActivity,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     mRequestCode);

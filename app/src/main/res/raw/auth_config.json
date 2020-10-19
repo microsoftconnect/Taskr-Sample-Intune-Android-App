@@ -1,0 +1,17 @@
+{
+  "client_id" : "<ClientID>",
+  "authorization_user_agent" : "DEFAULT",
+  "redirect_uri" : "msauth://com.intune.samples.taskr/<SignatureHash>",
+  "broker_redirect_uri_registered": true,
+  "multiple_clouds_supported": true,
+  "authorities" : [
+    {
+    "type": "AAD",
+    "audience": {
+      "type": "AzureADMultipleOrgs",
+      "tenant_id": "common"
+      }
+    }
+  ],
+  "account_mode": "MULTIPLE"
+}

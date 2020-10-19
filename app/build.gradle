@@ -15,7 +15,7 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.microsoft.intune.samples.taskr"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -39,28 +39,28 @@ android {
 }
 
 dependencies {
-    implementation "androidx.appcompat:appcompat:1.0.2"
-    implementation "com.google.android.material:material:1.0.0"
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation "androidx.appcompat:appcompat:1.2.0"
+    implementation "com.google.android.material:material:1.2.1"
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
 
-    def lifecycle_version = '2.0.0'
+    def lifecycle_version = '2.2.0'
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
 
-    def room_version = '2.1.0'
+    def room_version = '2.2.5'
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
     // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     // Include the MAM SDK
     implementation files('MAMSDK/Microsoft.Intune.MAM.SDK.aar')
 
-    // Include ADAL, Microsoft's sign-in service
-    implementation 'com.microsoft.aad:adal:1.16.3'
+    // Include MSAL
+    implementation 'com.microsoft.identity.client:msal:1.5.5'
 }
 
 intunemam {

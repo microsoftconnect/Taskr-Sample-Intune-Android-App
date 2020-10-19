@@ -18,7 +18,7 @@ import com.microsoft.intune.mam.client.app.MAMComponents;
 import com.microsoft.intune.mam.policy.appconfig.MAMAppConfig;
 import com.microsoft.intune.mam.policy.appconfig.MAMAppConfigManager;
 import com.microsoft.intune.samples.taskr.R;
-import com.microsoft.intune.samples.taskr.authentication.AuthManager;
+import com.microsoft.intune.samples.taskr.authentication.AppSettings;
 
 
 /**
@@ -42,8 +42,9 @@ public class AboutFragment extends Fragment {
         TextView configText = view.findViewById(R.id.about_nav_config_text);
 
         // Get and show the targeted application configuration
+        String currentUser = AppSettings.getAccount(this.getContext()).getAADID();
         MAMAppConfigManager configManager = MAMComponents.get(MAMAppConfigManager.class);
-        MAMAppConfig appConfig = configManager.getAppConfig(AuthManager.getUser());
+        MAMAppConfig appConfig = configManager.getAppConfig(currentUser);
 
         configText.setText(appConfig == null ? getString(R.string.err_unset)
                 : getString(R.string.about_nav_config_text, appConfig.getFullData().toString()));
