@@ -1,5 +1,5 @@
 # Taskr - A [Microsoft Intune](https://www.microsoft.com/en-us/cloud-platform/microsoft-intune) React Native + Android MAM SDK Example
-This project is a demonstration of the [Microsoft Intune SDK for Android](https://docs.microsoft.com/en-us/intune/app-sdk) in projects that primarily use [React Native](https//reactnative.dev).
+This project is a demonstration of the [Microsoft Intune SDK for Android](https://docs.microsoft.com/en-us/intune/app-sdk) in projects that primarily use [React Native](https://reactnative.dev).
 A developer guide to the SDK is available [here](https://docs.microsoft.com/en-us/intune/app-sdk-android).
 This project implements some commonly used features so developers making their own apps have an example to follow.
 IT administrators who want to create apps with similar functionality can even use this as a template.
