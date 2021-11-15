@@ -10,7 +10,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath 'com.android.tools.build:gradle:4.0.2'
         // Include the MAM build plugin and Javassist, which it depends on
         classpath "org.javassist:javassist:3.22.0-GA"
         classpath files("app/MAMSDK/com.microsoft.intune.mam.build.jar")

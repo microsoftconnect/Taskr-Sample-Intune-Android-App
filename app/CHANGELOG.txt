@@ -1,3 +1,9 @@
+Version 2.2
+-------------
+* Update the MAM SDK to version 8.1.1
+* Updates MSAL to version 2.0.8
+* Bumps the min SDK version to match the MAM SDK min version.
+
 Version 2.1
 -------------
 * Remove ADAL authentication files.

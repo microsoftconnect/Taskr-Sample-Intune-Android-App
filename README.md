@@ -2,7 +2,7 @@
 
 | MAM SDK Version | MSAL Version |
 |-|-|
-| 6.7.0 | 1.5.5 |
+| 8.1.1 | 2.0.8 |
 
 This project is a demonstration of the [Microsoft Intune SDK for Android] and contains examples
 from the [SDK Guide], which is available to provide additional developer guidance.
@@ -72,7 +72,8 @@ The AndroidManifest contains the BrowserTabActivity that is required for proper 
 
 ``` xml
 <!-- Must be specified to allow users to login via MSAL -->
-<activity android:name="com.microsoft.identity.client.BrowserTabActivity">
+<activity android:name="com.microsoft.identity.client.BrowserTabActivity"
+    android:exported="true">
     <intent-filter>
         <action android:name="android.intent.action.VIEW" />
 
@@ -95,6 +96,9 @@ The `SignatureHash` will need to be replaced with the MSAL
 registration values for your application.
 
 There is no specific MAM code alteration required for the `BrowserTabActivity`.
+
+Apps targeting Android 12 must explicitly declare the `android:exported` attribute for app components. Activity supporting `VIEW` and `LAUNCHER` must be exported.
+For more information check Android developer notes on [Behavior changes].
 
 ### MSALUtil class
 
@@ -198,6 +202,7 @@ The `SaveFragment` class models how to check data transfer policy for saving dat
 [Microsoft Intune SDK for Android]: https://docs.microsoft.com/en-us/intune/app-sdk
 [SDK Guide]: https://docs.microsoft.com/en-us/mem/intune/developer/app-sdk-android
 [Enable features that require app participation]: https://docs.microsoft.com/en-us/mem/intune/developer/app-sdk-android#enable-features-that-require-app-participation
+[Behavior changes]: https://developer.android.com/about/versions/12/behavior-changes-12#exported
 
 <!-- MAM Multi-Identity -->
 [multi-identity application]: https://docs.microsoft.com/en-us/intune/app-sdk-android#multi-identity-optional
