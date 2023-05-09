@@ -39,7 +39,7 @@
                     note that the leading "/" is required for android:path
                 -->
                 <data
-                    android:host="com.intune.samples.taskr"
+                    android:host="com.microsoft.intune.samples.taskr"
                     android:path="/SignatureHash"
                     android:scheme="msauth" />
             </intent-filter>

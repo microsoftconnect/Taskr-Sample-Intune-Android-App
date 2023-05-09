@@ -10,21 +10,37 @@ import Header from './common/Header';
 import Tabs from './common/Tabs';
 import TaskPage from './tasks/TaskPage';
 import AboutPage from './about/AboutPage';
-
+import TrustedRootsPage from './trustedroots/TrustedRootsPage';
 
 /**
  * Main Component of App - contains all of the app subcomponents 
  * Also handles tabs and page switching functionality 
  */
 const App = () => {
-  // Tab state using boolean for only 2 tabs. True - Tasks, False - About 
-  const [tabIndex, setTab] = useState(true);
+  const [tabIndex, setTab] = useState(0);
+
+  let contentView;
+  switch (tabIndex) {
+    case 0:
+      contentView = <TaskPage />;
+      break;
+    case 1:
+      contentView = <AboutPage />;
+      break;
+    case 2:
+      contentView = <TrustedRootsPage />;
+      break;
+    default:
+      contentView = <TaskPage />;
+  }
+
+  const tabs = ['Tasks', 'About', 'Trusted Roots'];
 
   return (
     <>
       <Header />
-      {tabIndex ? <TaskPage /> : <AboutPage />}
-      <Tabs index={tabIndex} onTabChange={setTab} />
+      {contentView}
+      <Tabs tabs={tabs} selectedIndex={tabIndex} onTabChange={setTab} />
     </>
   );
 };

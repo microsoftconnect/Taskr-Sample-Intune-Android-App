@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) Microsoft Corporation. All rights reserved.
+  ~ Licensed under the MIT License.
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.microsoft.intune.samples.taskr.trustedroots.ui.ApacheHttpClientViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/base_layout"
+            layout="@layout/trusted_roots_base_client_layout"
+            bind:viewModel="@{(com.microsoft.intune.samples.taskr.trustedroots.ui.TrustedRootsHttpViewModel) viewModel}"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

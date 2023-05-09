@@ -9,4 +9,4 @@ Taskr allows users to keep a list of to-do items, or tasks. Users can view their
 
 ## Important Notes Before Starting (React Native Specific)
 ### Create a Debug Keystore
-In the android/app folder, create a new keystore named `debug.keystore`. React Native expects a keystore to sign the generated app during the build process.
+In the android/app folder, create a new keystore named `debug.keystore` according to the values specified in the signignConfigs section of the app's [build.gradle](android/app/build.gradle). React Native expects a keystore to sign the generated app during the build process.

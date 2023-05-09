@@ -7,6 +7,7 @@ import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
+import com.facebook.react.modules.network.OkHttpClientProvider;
 import com.facebook.soloader.SoLoader;
 
 import com.microsoft.aad.adal.AuthenticationContext;
@@ -19,6 +20,7 @@ import com.microsoft.intune.mam.policy.notification.MAMNotificationType;
 
 import com.microsoft.intune.samples.taskr.authentication.AuthManager;
 import com.microsoft.intune.samples.taskr.custom_modules.CustomPackage;
+import com.microsoft.intune.samples.taskr.trusted_roots.TrustedRootsOkHttpClientFactory;
 
 import java.util.List;
 
@@ -98,5 +100,10 @@ public class MainApplication extends Application implements ReactApplication {
          * More information is available here:
          * https://github.com/AzureAD/azure-activedirectory-library-for-android/#logs */
         Logger.getInstance().setAndroidLogEnabled(true);
+
+        /* The factory can't be overridden after the app has started, so we're setting it to use
+         * the Trusted Roots implementation from the start. See this comment:
+         * https://github.com/facebook/react-native/issues/34789#issuecomment-1265508234 */
+        OkHttpClientProvider.setOkHttpClientFactory(new TrustedRootsOkHttpClientFactory());
     }
 }
