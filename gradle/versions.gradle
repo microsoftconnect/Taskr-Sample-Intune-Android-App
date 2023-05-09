@@ -1,0 +1,16 @@
+/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License.
+ */
+
+ext.lifecycle_version = '2.2.0'
+ext.lifecycle_ktx_version = '2.5.1'
+
+ext.room_version = '2.2.5'
+ext.navigation_version = '2.5.3'
+
+// MSAL version
+ext.msal_version = '4.1.0'
+
+ext.apachehttpclient_version = '5.0.3'
+ext.okhttpclient_version = '4.9.3'

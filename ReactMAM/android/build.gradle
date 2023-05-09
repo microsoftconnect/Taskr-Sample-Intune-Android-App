@@ -1,16 +1,16 @@
 buildscript {
     ext {
-        buildToolsVersion = "29.0.2"
-        minSdkVersion = 21
-        compileSdkVersion = 29
-        targetSdkVersion = 29
+        buildToolsVersion = "33.0.0"
+        minSdkVersion = 26
+        compileSdkVersion = 33
+        targetSdkVersion = 33
     }
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:3.5.3")
+        classpath("com.android.tools.build:gradle:7.2.2")
         // Include the MAM build plugin and Javassist, which it depends on
         classpath("org.javassist:javassist:3.22.0-GA")
         classpath files("app/MAMSDK/com.microsoft.intune.mam.build.jar")

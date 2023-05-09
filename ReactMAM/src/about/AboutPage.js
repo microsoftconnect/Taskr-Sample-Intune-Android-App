@@ -42,6 +42,7 @@ const AboutPage = () => {
         Taskr is a line-of-business app that allows employees to keep a personal
         to-do list. It is a demonstration of Microsoft's Android MAM SDK, 
         an <Link text='Intune' href={INTUNE_LINK} /> product.
+        It also demonstrates how to integrate with the Trusted Root Certificates Management API.
       </Text>
       <Text style={{ paddingBottom: 15 }}>
         More information about the SDK is 

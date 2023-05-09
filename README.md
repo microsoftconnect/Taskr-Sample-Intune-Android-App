@@ -1,11 +1,13 @@
-# Taskr - A [Microsoft Intune](https://www.microsoft.com/en-us/cloud-platform/microsoft-intune) Android MAM SDK Example
+# Taskr - A [Microsoft Intune](https://www.microsoft.com/cloud-platform/microsoft-intune) Android MAM SDK Example
 
 | MAM SDK Version | MSAL Version |
 |-|-|
-| 8.1.1 | 2.0.8 |
+| 9.5.0 | 4.1.0 |
 
 This project is a demonstration of the [Microsoft Intune SDK for Android] and contains examples
 from the [SDK Guide], which is available to provide additional developer guidance.
+
+It also demonstrates how to integrate a line-of-business app with the Trusted Roots Certificates Management API. Detailed information can be found in section [Using Trusted Root Certificates from Intune to Establish Trust Anchors] of the SDK Guide.
 
 ## Important Notes Before Starting
 
@@ -44,7 +46,7 @@ The following policies require app participation in order to be properly enforce
 A full breakdown of policies requiring app participation can be found in the
 "[Enable features that require app participation]" section of the SDK guide.
 
-- Prevent Android backups – The app enables managed backups in `AndroidManifest.xml`. More information is available [here](https://docs.microsoft.com/en-us/intune/app-sdk-android#protecting-backup-data).
+- Prevent Android backups – The app enables managed backups in `AndroidManifest.xml`. More information is available [here](https://docs.microsoft.com/intune/app-sdk-android#protecting-backup-data).
 - Prevent "Save As":
   - To User's Device - To determine if saving to the device is allowed, the app manually checks the user's policy in `fragments/TasksFragment.java`. If allowed, the save button will save a CSV containing all open tasks to the user's device. Otherwise, a notification will be displayed to the user.
 - App configuration policies – The app displays the current configuration as an example on the About page in `fragments/AboutFragment.java`.
@@ -59,7 +61,7 @@ The following policies are automatically managed by the SDK without explicit app
 - Allow app to transfer data to other apps – This policy is demonstrated when the user clicks on the save button, which attempts to export a CSV containing tasks to Excel.
 - Disable printing – This policy is demonstrated when the user clicks on the print button, which attempts to open the CSV in Android’s default printing view.
 - Allow app to receive data from other apps – This policy is demonstrated when the app receives intents containing the text of a description to create a task.
-- Restrict web content to display in the [Managed Browser](https://docs.microsoft.com/en-us/intune/app-configuration-managed-browser) – This policy is demonstrated when a user clicks on a link from the About screen.
+- Restrict web content to display in the [Managed Browser](https://docs.microsoft.com/intune/app-configuration-managed-browser) – This policy is demonstrated when a user clicks on a link from the About screen.
 - Encrypt app data - This policy is demonstrated when the app attempts to save a CSV file. If enabled, the file will be encrypted on disk.
 
 ## About the code
@@ -185,30 +187,83 @@ The `SaveFragment` class models how to check data transfer policy for saving dat
             ...
 ```
 
+## Trusted Roots Certificate Management
+
+Trusted Root Certificates Management allows your app to use trusted root certificates from Intune in combination with certificates from the device. This allows your app to establish trust with resources that are protected by a certificate issued by your organization. 
+
+This sample showcases three different ways to use trusted roots certificates from Intune to establish trust anchors:
+
+### Using OkHttpClient
+
+The `submitOkHttpClientRequest` method in the `TrustedRootsNetworkHandler` class models how to configure an `OkHttpClient` to use the Trusted Root Certificates Management API.
+
+``` java
+    OkHttpClient okHttpClient = OkHttpClient.Builder()
+        .sslSocketFactory(
+            MAMTrustedRootCertsManager.createSSLSocketFactory(null, null),
+            MAMTrustedRootCertsManager.createX509TrustManagers(null).first() as X509TrustManager
+        )
+        .build();
+        ...
+```
+
+### Using Apache HttpClient
+
+The `submitApacheHttpClient5Request` method in the `TrustedRootsNetworkHandler` class models how to configure an `Apache HttpClient` to use the Trusted Root Certificates Management API.
+
+``` java
+    HttpClientConnectionManager connectionManager =
+        PoolingHttpClientConnectionManagerBuilder.create()
+            .setSSLSocketFactory(
+                SSLConnectionSocketFactory(MAMTrustedRootCertsManager.createSSLContext(null, null))
+            )
+            .build();
+
+    CloseableHttpClient httpClient = HttpClients.custom()
+        .setConnectionManager(connectionManager)
+        .build();
+        ...
+```
+
+### Using WebView
+
+The `WebViewClientFragment` and `WebViewClientViewModel` classes model how to configure a `WebView` to use the Trusted Roots enabled `WebViewClient` from the SDK.
+
+``` java
+    MAMCertTrustWebViewClient mamCertTrustWebViewClient = new MAMCertTrustWebViewClient();
+
+    // Set the MAM WebViewClient from the SDK as the current handler on the instance of WebView
+    webView.setWebViewClient(mamCertTrustWebViewClient);
+    ...
+```
+
 <!-- Links -->
 [Microsoft's demo site]: https://demos.microsoft.com
 
 <!-- Intune -->
-[Set up Intune]: https://docs.microsoft.com/en-us/intune/setup-steps
+[Set up Intune]: https://docs.microsoft.com/intune/setup-steps
 
 <!-- AAD -->
 [Register Your Own Application]: https://github.com/Azure-Samples/ms-identity-android-java#register-your-own-application-optional
 
 <!-- MAM Service -->
-[grant your app permissions]: https://docs.microsoft.com/en-us/intune/app-sdk-get-started#give-your-app-access-to-the-intune-app-protection-service-optional
-[APP service]: https://docs.microsoft.com/en-us/intune/app-sdk-android#app-protection-policy-without-device-enrollment
+[grant your app permissions]: https://docs.microsoft.com/intune/app-sdk-get-started#give-your-app-access-to-the-intune-app-protection-service-optional
+[APP service]: https://docs.microsoft.com/intune/app-sdk-android#app-protection-policy-without-device-enrollment
 
 <!-- MAM SDK -->
-[Microsoft Intune SDK for Android]: https://docs.microsoft.com/en-us/intune/app-sdk
-[SDK Guide]: https://docs.microsoft.com/en-us/mem/intune/developer/app-sdk-android
-[Enable features that require app participation]: https://docs.microsoft.com/en-us/mem/intune/developer/app-sdk-android#enable-features-that-require-app-participation
+[Microsoft Intune SDK for Android]: https://docs.microsoft.com/intune/app-sdk
+[SDK Guide]: https://docs.microsoft.com/mem/intune/developer/app-sdk-android
+[Enable features that require app participation]: https://docs.microsoft.com/mem/intune/developer/app-sdk-android#enable-features-that-require-app-participation
 [Behavior changes]: https://developer.android.com/about/versions/12/behavior-changes-12#exported
 
 <!-- MAM Multi-Identity -->
-[multi-identity application]: https://docs.microsoft.com/en-us/intune/app-sdk-android#multi-identity-optional
-[multi-identity application integration guide]: https://docs.microsoft.com/en-us/intune/app-sdk-android#enabling-multi-identity
+[multi-identity application]: https://docs.microsoft.com/intune/app-sdk-android#multi-identity-optional
+[multi-identity application integration guide]: https://docs.microsoft.com/intune/app-sdk-android#enabling-multi-identity
 
 <!-- MSAL -->
 [MSAL]: https://github.com/AzureAD/microsoft-authentication-library-for-android
 [About the code]: https://github.com/Azure-Samples/ms-identity-android-java#about-the-code
 [Using MSAL]: https://github.com/AzureAD/microsoft-authentication-library-for-android#using-msal
+
+<!-- Trusted Roots -->
+[Using Trusted Root Certificates from Intune to Establish Trust Anchors]: https://learn.microsoft.com/mem/intune/developer/app-sdk-android-phase7#trusted-root-certificates-management

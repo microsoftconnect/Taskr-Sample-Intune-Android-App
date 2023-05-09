@@ -22,23 +22,21 @@ import {
 
 /**
  * Common Tab Component to Switch Between Pages
- * @param index Currently selected Tab (True for Tasks, False for About)
- * @param onTabChange Function to pass selected tab when pressed
+ * @param selectedIndex Index of the currently selected tab
+ * @param tabs Array of tab names
+ * @param onTabChange Function to call when a tab is selected
  */
-const Tabs = ({ index, onTabChange }) => {
+const Tabs = ({ selectedIndex, tabs, onTabChange }) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity 
-        style={[styles.tab, index && styles.selected]} 
-        onPress={() => onTabChange(true)}>
-          <Text style={styles.tabText}>Tasks</Text>
-      </TouchableOpacity>
-      
-      <TouchableOpacity 
-        style={[styles.tab, !index && styles.selected]} 
-        onPress={() => onTabChange(false)}>
-          <Text style={styles.tabText}>About</Text>
-      </TouchableOpacity>
+      {tabs.map((tab, index) => (
+        <TouchableOpacity 
+          key={index}
+          style={[styles.tab, selectedIndex === index && styles.selected]} 
+          onPress={() => onTabChange(index)}>
+            <Text style={styles.tabText}>{tab}</Text>
+        </TouchableOpacity>
+      ))}
 
       <TouchableOpacity style={styles.tab} onPress={signOut}>
         <Text style={styles.tabText}>Sign Out</Text>

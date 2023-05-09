@@ -34,6 +34,7 @@ import com.microsoft.intune.samples.taskr.authentication.MSALUtil;
 import com.microsoft.intune.samples.taskr.fragments.AboutFragment;
 import com.microsoft.intune.samples.taskr.fragments.TasksFragment;
 import com.microsoft.intune.samples.taskr.fragments.SubmitFragment;
+import com.microsoft.intune.samples.taskr.trustedroots.ui.TrustedRootsFragment;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity
                 LOGGER.log(Level.SEVERE, "Failed to sign out user " + effectiveAccount.getAADID(), e);
             }
 
-            mEnrollmentManager.unregisterAccountForMAM(effectiveAccount.getUPN());
+            mEnrollmentManager.unregisterAccountForMAM(effectiveAccount.getUPN(), effectiveAccount.getAADID());
             AppSettings.clearAccount(getApplicationContext());
             mUserAccount = null;
 
@@ -162,6 +163,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_about:
                 frag = new AboutFragment();
                 break;
+            case R.id.nav_trusted_roots:
+                frag = new TrustedRootsFragment();
+                break;
             case R.id.nav_sign_out:
                 signOutUser();
                 break;
@@ -191,9 +195,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showMessage(final String message) {
-        runOnUiThread(() -> {
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        });
+        runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show());
     }
 
     private class AuthCallback implements AuthenticationCallback {

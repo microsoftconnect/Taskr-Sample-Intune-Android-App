@@ -52,6 +52,7 @@
         to keep a personal to-do list. It is a demonstration of Microsoft\'s
         Android MAM SDK, an
         <a href="https://www.microsoft.com/en-us/cloud-platform/microsoft-intune">Intune</a> product.
+        It also demonstrates how to configure integration with the Trusted Roots Certificates Management API.
     </string>
     <string name="about_nav_body_2">More information about the SDK is available
         <a href="https://docs.microsoft.com/en-us/intune/app-sdk">here</a> and a developer guide
@@ -61,4 +62,11 @@
     <string name="about_nav_footer">
         Developed By <a href="https://microsoft.com">Microsoft</a>
     </string>
+    <string name="nav_trusted_roots_title">Trusted Roots</string>
+    <string name="trusted_roots">Trusted Roots</string>
+    <string name="trust_custom_certs_text">Trust custom certs</string>
+    <string name="response_label">Response</string>
+    <string name="send_request">Send Request</string>
+    <string name="request_url_label">Request URL</string>
+    <string name="request_url_hint">https://contoso.com</string>
 </resources>
